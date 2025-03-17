@@ -1,7 +1,3 @@
-"""
-Medium article scraper module using BeautifulSoup.
-"""
-
 import requests
 import logging
 from bs4 import BeautifulSoup
@@ -87,7 +83,6 @@ class MediumScraper:
             "author": self._extract_author(soup),
             "date": self._extract_date(soup),
             "content": self._extract_content(soup),
-            "claps": self._extract_claps(soup),
             "responses": self._extract_comments(soup),
             "tags": self._extract_tags(soup),
             "reading_time": self._extract_reading_time(soup)
@@ -103,16 +98,18 @@ class MediumScraper:
     def _extract_author(self, soup):
         """Extract the author information"""
         # Look for author information
-        author_element = soup.find('a', {'rel': 'author'})
+        author_element = soup.find('a', {'data-testid': 'authorName'})
         if author_element:
             return author_element.get_text().strip()
         return "Author not found"
 
     def _extract_date(self, soup):
         """Extract the publication date"""
-        date_element = soup.find('time')
+        # First try to find date by data-testid attribute
+        date_element = soup.find('span', {'data-testid': 'storyPublishDate'})
         if date_element:
             return date_element.get_text().strip()
+            
         return "Date not found"
 
     def _extract_reading_time(self, soup):
@@ -204,45 +201,60 @@ class MediumScraper:
             
         return content
 
-    def _extract_claps(self, soup):
-        """Extract the number of claps/likes"""
-        claps_element = soup.find(text=re.compile('clap'))
-        if claps_element:
-            parent = claps_element.parent
-            if parent:
-                claps_text = parent.get_text().strip()
-                claps_match = re.search(r'(\d+(?:,\d+)*)', claps_text)
-                if claps_match:
-                    return claps_match.group(1)
-        return "Claps not found"
-
     def _extract_comments(self, soup):
         """Extract article comments/responses"""
         comments = []
-        response_section = soup.find('div', string=re.compile('Responses'))
         
-        if response_section:
-            # Find the parent or container of responses
-            response_container = response_section.find_parent('div')
-            if response_container:
-                # Find all comments
-                comment_elements = response_container.find_all('div', class_=lambda c: c and 'responsesStream' in c)
-                
-                for comment in comment_elements:
-                    author_element = comment.find('a', {'rel': 'author'})
-                    text_element = comment.find('p')
+        response_heading = soup.find('h2', string=lambda s: s and 'Responses' in s)
+        
+        if response_heading:
+            response_containers = soup.find_all('div', class_="bh ez")
+            
+            if response_containers:
+                for container in response_containers:
+                    # Get author information
+                    author_element = container.find('p', class_=lambda c: c and 'bk' in c and 'bg' in c) 
                     
+                    # Get response text - it's often in a pre tag with class "kl"
+                    text_element = container.find('pre', class_="kl")
+                    if text_element:
+                        text_element = text_element.find('div', class_="gu")
+                    
+                    # Get date
+                    date_element = container.find('span')
+                    
+                    # Create comment data structure
                     comment_data = {
                         "author": author_element.get_text().strip() if author_element else "Unknown",
                         "text": text_element.get_text().strip() if text_element else "No text",
-                        "date": None
+                        "date": date_element.get_text().strip() if date_element else None,
                     }
                     
-                    # Try to find comment date
-                    date_element = comment.find('time')
-                    if date_element:
-                        comment_data["date"] = date_element.get_text().strip()
-                        
+                    comments.append(comment_data)
+        
+        # If we didn't find responses using the above method, try an alternative approach
+        if not comments:
+            response_div = soup.find('div', class_=lambda c: c and 'dj bh hs ht hu hv' in c)
+            if response_div:
+                response_containers = response_div.find_all('div', class_=lambda c: c and 'fq l' in c)
+                
+                for container in response_containers:
+                    # Get author information
+                    author_element = container.find('p', class_=lambda c: c and 'bk' in c)
+                    
+                    # Get response text
+                    text_element = container.find('div', class_="gu")
+                    
+                    # Get date
+                    date_element = container.find('span')
+                    
+                    # Create comment data structure
+                    comment_data = {
+                        "author": author_element.get_text().strip() if author_element else "Unknown",
+                        "text": text_element.get_text().strip() if text_element else "No text",
+                        "date": date_element.get_text().strip() if date_element else None,
+                    }
+                    
                     comments.append(comment_data)
         
         return comments if comments else []
