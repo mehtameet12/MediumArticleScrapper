@@ -36,7 +36,6 @@ def scrape_article(url, output_path="output.json"):
         return False
 
 if __name__ == "__main__":
-    # Use command line arguments if provided, otherwise use default values
     url = sys.argv[1] if len(sys.argv) > 1 else "https://medium.com/electronic-life/ai-music-style-can-there-be-too-much-culture-6e1f5480794a"
     output_path = sys.argv[2] if len(sys.argv) > 2 else "output.json"
     
@@ -48,5 +47,5 @@ if __name__ == "__main__":
     if success:
         print(f"Successfully scraped article and saved to {output_path}")
     else:
-        print("Failed to scrape article. Check the logs for details.")
+        print("Failed to scrape article.")
         sys.exit(1)
