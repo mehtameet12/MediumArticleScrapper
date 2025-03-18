@@ -56,4 +56,5 @@ python scrape-article.py
 python scrape_article.py "<link to dev article>"
 ```
 
-This should output a file called `raw_output.json` in the project root.
+Running the command should produce a file called `raw_output.json` in the project root which contains the raw scraped data from the article. 
+It will also produce a file called `processed_output.json` in the project root which contains data that is more usable and refined.
