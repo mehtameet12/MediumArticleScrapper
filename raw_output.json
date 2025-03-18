@@ -1,8 +1,8 @@
 {
-  "url": "https://dev.to/ruppysuppy/redux-vs-context-api-when-to-use-them-4k3p",
-  "title": "Redux vs Context API: When to use them",
-  "author": "Tapajyoti Bose",
-  "date": "Mar 1",
+  "url": "https://dev.to/qodo/introducing-qodo-gen-10-transform-your-workflow-with-agentic-ai-5a96",
+  "title": "Introducing Qodo Gen 1.0: Transform Your Workflow with Agentic AI",
+  "author": "Zaid Khan",
+  "date": "Mar 11",
   "content": [
     {
       "type": "section",
@@ -10,510 +10,184 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "Posted on Nov 28, 2021\n\n                      • Edited on Mar 1"
+          "text": "Posted on Mar 11"
         },
         {
           "type": "paragraph",
-          "text": "The simplest way to pass data from a parent to a child in a React Application is by passing it on to the child's props. But an issue arises when a deeply nested child requires data from a component higher up in the tree. If we pass on the data through the props, every single one of the children would be required to accept the data and pass it on to its child, leading to prop drilling, a terrible practice in the world of React."
-        },
-        {
-          "type": "paragraph",
-          "text": "To solve the prop drilling issue, we have State Management Solutions like Context API and Redux. But which one of them is best suited for your application? Today we are going to answer this age-old question!"
+          "text": "Today, we’re excited to introduce Qodo Gen 1.0 to the community!"
         }
       ]
     },
     {
       "type": "section",
-      "title": "What is the Context API?",
+      "title": "What is Qodo Gen?",
       "content": [
         {
           "type": "paragraph",
-          "text": "Let's check the official documentation:"
-        },
-        {
-          "type": "quote",
-          "text": "In a typical React application, data is passed top-down (parent to child) via props, but such usage can be cumbersome for certain types of props (e.g. locale preference, UI theme) that are required by many components within an application. Context provides a way to share values like these between components without having to explicitly pass a prop through every level of the tree."
+          "text": "Qodo Gen is an IDE-plugin that integrates intelligent agents for test and code generation, directly into your development environment."
         },
         {
           "type": "paragraph",
-          "text": "In a typical React application, data is passed top-down (parent to child) via props, but such usage can be cumbersome for certain types of props (e.g. locale preference, UI theme) that are required by many components within an application. Context provides a way to share values like these between components without having to explicitly pass a prop through every level of the tree."
+          "text": "While many AI coding tools operate as simple command-response systems, Qodo Gen 1.0 represents the next generation: autonomous, multi-step problem-solving agents that work alongside you. Rather than just generating snippets, our agents understand your entire project context, can make decisions, use tools, and carry out tasks autonomously."
         },
         {
           "type": "paragraph",
-          "text": "Context API is a built-in React tool that does not influence the final bundle size, and is integrated by design."
+          "text": "Try Qodo Gen 1.0"
         },
         {
           "type": "paragraph",
-          "text": "To use the Context API, you have to:"
-        },
-        {
-          "type": "paragraph",
-          "text": "Create the Context"
-        },
-        {
-          "type": "code",
-          "text": "const Context = createContext(MockData);"
-        },
-        {
-          "type": "paragraph",
-          "text": "Create a Provider for the Context"
-        },
-        {
-          "type": "code",
-          "text": "const Parent = () => {\n    return (\n        <Context.Provider value={initialValue}>\n            <Children/>\n        </Context.Provider>\n    )\n}"
-        },
-        {
-          "type": "paragraph",
-          "text": "Consume the data in the Context"
-        },
-        {
-          "type": "code",
-          "text": "const Child = () => {\n    const contextData = useContext(Context);\n    // use the data\n    // ...\n}"
+          "text": "Read on to learn about our new and updated features!"
         }
       ]
     },
     {
       "type": "section",
-      "title": "So What is Redux?",
+      "title": "Agentic chat",
       "content": [
         {
           "type": "paragraph",
-          "text": "Of course, let's head over to the documentation:"
-        },
-        {
-          "type": "quote",
-          "text": "Redux is a predictable state container for JavaScript apps.\nIt helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as live code editing combined with a time-traveling debugger.\nYou can use Redux together with React, or with any other view library. It is tiny (2kB, including dependencies), but has a large ecosystem of addons available."
+          "text": "Qodo Gen now supports either Standard or Agentic workflow modes. Standard mode offers a more manual Qodo Gen experience, including Commands."
         },
         {
           "type": "paragraph",
-          "text": "Redux is a predictable state container for JavaScript apps."
+          "text": "Agentic Mode makes interactions more dynamic and less structured, proactively assisting with tasks and providing contextual suggestions."
         },
         {
           "type": "paragraph",
-          "text": "It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as live code editing combined with a time-traveling debugger."
+          "text": "The agentic chat is the evolution to multi-step problem-solving rather than one-shot AI responses. Qodo Gen’s agentic chat is autonomous in that instead of just writing code or answering a question just once, the chat agent can make decisions, ask questions, use tools and carry out tasks autonomously."
         },
         {
           "type": "paragraph",
-          "text": "You can use Redux together with React, or with any other view library. It is tiny (2kB, including dependencies), but has a large ecosystem of addons available."
+          "text": "The coding agent leverages core Qodo tools for understanding prompt intent and advanced context retrieval that include codebase indexing and analysis, web search and scraping."
         },
         {
           "type": "paragraph",
-          "text": "Redux is an Open Source Library which provides a central store, and actions to modify the store. It can be used with any project using JavaScript or TypeScript, but since we are comparing it to Context API, so we will stick to React-based Applications."
+          "text": "Here are some of the things the agent can do:"
         },
         {
           "type": "paragraph",
-          "text": "To use Redux you need to:"
-        },
-        {
-          "type": "paragraph",
-          "text": "Create a Reducer"
-        },
-        {
-          "type": "code",
-          "text": "import { createSlice } from \"@reduxjs/toolkit\";\n\nexport const slice = createSlice({\n    name: \"slice-name\",\n    initialState: {\n        // ...\n    },\n    reducers: {\n        func01: (state) => {\n            // ...\n        },\n    }\n});\n\nexport const { func01 } = slice.actions;\nexport default slice.reducer;"
-        },
-        {
-          "type": "paragraph",
-          "text": "Configure the Store"
-        },
-        {
-          "type": "code",
-          "text": "import { configureStore } from \"@reduxjs/toolkit\";\nimport reducer from \"./reducer\";\n\nexport default configureStore({\n    reducer: {\n        reducer: reducer\n    }\n});"
-        },
-        {
-          "type": "paragraph",
-          "text": "Make the Store available for data consumption"
-        },
-        {
-          "type": "code",
-          "text": "import React from 'react';\nimport ReactDOM from 'react-dom';\nimport { Provider } from 'react-redux';\nimport App from './App.jsx'\nimport store from './store';\n\nReactDOM.render(\n    <Provider store={store}>\n        <App />\n    </Provider>,\n    document.getElementById(\"root\")\n);"
-        },
-        {
-          "type": "paragraph",
-          "text": "Use State or Dispatch Actions"
-        },
-        {
-          "type": "code",
-          "text": "import { useSelector, useDispatch } from 'react-redux';\nimport { func01 } from './redux/reducer';\n\nconst Component = () => {\n    const reducerState = useSelector((state) => state.reducer);\n    const dispatch = useDispatch();\n    const doSomething = () = > dispatch(func01)  \n    return (\n        <>\n            {/* ... */}\n        </>\n    );\n}\nexport default Component;"
-        },
-        {
-          "type": "paragraph",
-          "text": "That's all Phew! As you can see, Redux requires way more work to get it set up."
+          "text": "This AI-powered conversational interface accelerates development while keeping you in control."
         }
       ]
     },
     {
       "type": "section",
-      "title": "Comparing Redux & Context API",
+      "title": "Extensible Agent & Tooling Support",
       "content": [
         {
           "type": "paragraph",
-          "text": "From the table, you must be able to comprehend where the popular opinion Redux is for large projects & Context API for small ones come from."
-        },
-        {
-          "type": "paragraph",
-          "text": "Both are excellent tools for their own specific niche, Redux is overkill just to pass data from parent to child & Context API truly shines in this case. When you have a lot of dynamic data Redux got your back!"
-        },
-        {
-          "type": "paragraph",
-          "text": "So you no longer have to that guy who goes:"
+          "text": "In order to understand your code better and help you perform various actions, Agentic Mode uses multiple services behind the scenes. In addition to built-in servers, users can add their own external tools via Anthropic’s Model Context Protocol (MCP).  Users who have installed the MCP server can bring 3rd party or custom tools and agents to enhance their workflows by adding the API key."
         }
       ]
     },
     {
       "type": "section",
-      "title": "Wrapping Up",
+      "title": "Built-in agentic tools",
       "content": [
         {
           "type": "paragraph",
-          "text": "In this article, we went through what is Redux and Context API and their differences. We learned, Context API is a light-weight solution which is more suited for passing data from a parent to a deeply nested child and Redux is a more robust State Management solution."
-        },
-        {
-          "type": "paragraph",
-          "text": "Happy Developing!"
+          "text": "This extensibility ensures that Qodo Gen 1.0 seamlessly integrates into your development environment, allowing you to enhance workflows with both built-in capabilities and custom tools tailored to your needs."
         }
       ]
     },
     {
       "type": "section",
-      "title": "Thanks for reading",
+      "title": "Semi-agentic test generation",
       "content": [
         {
           "type": "paragraph",
-          "text": "Need a Top Rated Software Development Freelancer to chop away your development woes? Contact me on Upwork"
+          "text": "In previous versions of Qodo Gen, testing capabilities were carried out in a panel within the IDE. This advanced testing suite was dedicated to code behavior analysis, test behavior generation and test suite expansion."
         },
         {
           "type": "paragraph",
-          "text": "Want to see what I am working on? Check out my Personal Website and GitHub"
-        },
-        {
-          "type": "paragraph",
-          "text": "Want to connect? Reach out to me on LinkedIn"
-        },
-        {
-          "type": "paragraph",
-          "text": "Follow my blogs for bi-weekly new Tidbits on Medium"
-        },
-        {
-          "type": "paragraph",
-          "text": "FAQ"
-        },
-        {
-          "type": "paragraph",
-          "text": "These are a few commonly asked questions I get. So, I hope this FAQ section solves your issues."
-        },
-        {
-          "type": "paragraph",
-          "text": "I am a beginner, how should I learn Front-End Web Dev?\nLook into the following articles:"
-        },
-        {
-          "type": "paragraph",
-          "text": "Would you mentor me?\nSorry, I am already under a lot of workload and would not have the time to mentor anyone."
+          "text": "In Qodo Gen 1.0, users now have the option to use a chat-based, semi-agentic test generation workflow. Users can follow a step-by-step flow to add context, example tests and mocks, generate test behaviors and comprehensive test suites."
         }
       ]
     },
     {
       "type": "section",
-      "title": "Context API vs. ES6 import",
+      "title": "Using Test Generation",
       "content": [
         {
           "type": "paragraph",
-          "text": "Context API is too complicated. I can simply import MockData from './mockData' and use it in any component. Context API has 10 lines, import only 1 line."
+          "text": "This new workflow makes test generation more interactive and intuitive, allowing developers to collaborate with Qodo Gen 1.0 in refining, expanding, and optimizing their test suites with greater efficiency."
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Get Started with Qodo Gen 1.0",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Qodo Gen 1.0 is now available! Whether you're streamlining development, integrating AI-driven automation, or optimizing your test suite, Qodo has the tools to transform your workflow."
         },
         {
           "type": "paragraph",
-          "text": "Then you can write another blog post Redux vs. ES6 import."
+          "text": "Try Qodo Gen 1.0"
         },
         {
           "type": "paragraph",
-          "text": "There are maybe projects which"
-        },
-        {
-          "type": "paragraph",
-          "text": "And then there are devs reading blogs about using redux is too complicated and end up introducing their own concepts and ideas around the Context API without knowing one thing about immutable data optimizations and so on."
-        },
-        {
-          "type": "paragraph",
-          "text": "You can use a react context to solve problems that are also being solved by redux, but some features and optimizations are not that easy for homegrown solutions. I mean try it out - it's a great exercise to understand why you should maybe use redux in your production code or stick to a simpler solution that has less features at all."
-        },
-        {
-          "type": "paragraph",
-          "text": "I'm not saying, that you should use redux in every project, but redux is not just some stupid boilerplate around the Context API => if you need global state utils check out the libs built for it. There are also others than redux."
-        },
-        {
-          "type": "paragraph",
-          "text": "Redux used to be my first choice for large applications but these days I much prefer to use the Context API. Still good to know Redux though just in case and many projects and companies still require you to know it."
-        },
-        {
-          "type": "paragraph",
-          "text": "Hello, I have developed a library, react-context-slices which allows to manage state through Context easily and quickly. It has 0 boilerplate. You can define slices of Context and fetch them with a unique hook, useSlice, which acts either as a useState or useReducer hook, depending on if you defined a reducer or not for the slice of Context you are fetching."
-        },
-        {
-          "type": "paragraph",
-          "text": "Also, if you need to maintain some sort of complex state for any mid-level project, you can still create your own reducer using React's Context API itself, before reaching out for redux and adding external dependencies to your project initially."
-        },
-        {
-          "type": "paragraph",
-          "text": "But you might take a performance hit. Redux seems to be better performance-wise when you intend to update the shared data a lot - see stackoverflow.com/a/66972857/7677851."
-        },
-        {
-          "type": "paragraph",
-          "text": "If used correctly that is."
-        },
-        {
-          "type": "paragraph",
-          "text": "One of the best and most overlooked alternatives to Redux is to use React's own built-in Context API."
-        },
-        {
-          "type": "paragraph",
-          "text": "Context API provides a different approach to tackling the data flow problem between React’s deeply nested components. Context has been around with React for quite a while, but it has changed significantly since its inception. Up to version 16.3, it was a way to handle the state data outside the React component tree. It was an experimental feature not recommended for most use cases."
-        },
-        {
-          "type": "paragraph",
-          "text": "Initially, the problem with legacy context was that updates to values that were passed down with context could be “blocked” if a component skipped rendering through the shouldComponentUpdate lifecycle method. Since many components relied on shouldComponentUpdate for performance optimizations, the legacy context was useless for passing down plain data."
-        },
-        {
-          "type": "paragraph",
-          "text": "The new version of Context API is a dependency injection mechanism that allows passing data through the component tree without having to pass props down manually at every level."
-        },
-        {
-          "type": "paragraph",
-          "text": "The most important thing here is that, unlike Redux, Context API is not a state management system. Instead, it’s a dependency injection mechanism where you manage a state in a React component. We get a state management system when using it with useContext and useReducer hooks."
-        },
-        {
-          "type": "paragraph",
-          "text": "A great next step to learning more is to read this article by Andy Fernandez: scalablepath.com/react/context-api..."
-        },
-        {
-          "type": "paragraph",
-          "text": "Can you give me some explanation to what you meant when you wrote Context is DI."
-        },
-        {
-          "type": "paragraph",
-          "text": "Exciting topic! 🚀 I love exploring the nuances of state management in React, and finding the sweet spot between Redux and Context API for optimal performance and simplicity. What factors do you prioritize when making the choice? 🤔"
-        },
-        {
-          "type": "paragraph",
-          "text": "I found Redux to be easier to setup and work with than Context API. I migrated a library I was building in Redux to context API and reused most of the reducer logic, but the amount of optimization and debugging I had to do to make the same functionality work was a nightmare in Context. It made me appreciate Redux more and I switched back to save time. It was a good learning to know the specific use case and limitations of context."
-        },
-        {
-          "type": "paragraph",
-          "text": "I too am a huge fan of redux for most projects!"
-        },
-        {
-          "type": "paragraph",
-          "text": "Hi, We have build out site in react: upride.in , which tech stack should be better in 2024 as we want to do a complete revamp for faster loading.\nif anyone can help for our site that how we can make progress."
-        },
-        {
-          "type": "paragraph",
-          "text": "@ IDURAR , we use react context api for all UI parts , and we keep our data layer inside redux ."
-        },
-        {
-          "type": "paragraph",
-          "text": "Here Article about : 🚀 Mastering Advanced Complex React useContext with useReducer ⭐ (Redux like Style) ⭐ : dev.to/idurar/mastering-advanced-c..."
-        },
-        {
-          "type": "paragraph",
-          "text": "Are you sure you want to hide this comment? It will become hidden in your post, but will still be visible via the comment's permalink."
-        },
-        {
-          "type": "paragraph",
-          "text": "Hide child comments as well"
-        },
-        {
-          "type": "paragraph",
-          "text": "Confirm"
-        },
-        {
-          "type": "paragraph",
-          "text": "For further actions, you may consider blocking this person and/or reporting abuse"
+          "text": "Thanks for reading! Questions or comments? Leave them below."
         }
       ]
     }
   ],
   "comments": [
     {
-      "author": "Lenz Weber",
-      "comment_text": "You are referring to a style of Redux there that is not the recommended style of writing Redux for over two years now. Modern Redux looks very differently and is about 1/4 of the code. It does not use switch..case reducers, ACTION_TYPES or createStore and is a lot easier to set up than what you are used to.\nI'd highly recommend going through the official Redux tutorial and maybe updating this article afterwards.",
-      "likes": 41,
-      "date": "Nov 28",
-      "comment_id": "811603",
-      "sentiment": "null"
-    },
-    {
-      "author": "Tapajyoti Bose",
-      "comment_text": "Thanks for pointing it out, please take a look now\nIts great to have one of the creators of Redux reviewing my article!",
-      "likes": 6,
-      "date": "Nov 28",
-      "comment_id": "811648",
-      "sentiment": "null"
-    },
-    {
-      "author": "Lenz Weber",
-      "comment_text": "Now the Redux portion looks okay for me - as for the comparison, I'd still say it doesn't 100% stand as the two examples just do very different things - the Context example only takes initialValue from somewhere and passes it down the tree, but you don't even have code to change that value ever in the future.\nSo if you add code for that (and also pass down an option to change that data), you will probably already here get to a point where the Context is already more code than the Redux solution.",
-      "likes": 9,
-      "date": "",
-      "comment_id": "811668",
-      "sentiment": "null"
-    },
-    {
-      "author": "Tapajyoti Bose",
-      "comment_text": "I'm not entirely sure whether I agree on this point. Using context with data update would only take 4 more lines:\n\nFunction in Mock data\n\nuseState in the Parent\nUpdate handler in initialValue\n\nUsing the update handler in the Child",
-      "likes": 2,
-      "date": "",
-      "comment_id": "811676",
-      "sentiment": "null"
-    },
-    {
-      "author": "Lenz Weber",
-      "comment_text": "In the end, it usually ends up as quite some more code - see kentcdodds.com/blog/how-to-use-rea... for example.\nBut just taking your examples side by side:\n\nUsage in the component is pretty much the same amount of code.\nIn both cases you need to wrap the app in a Provider (you forgot that in the context examples above)\ncreating a slice and creating the Provider wrapper pretty much abstract the same logic - but in a slice, you can use mutating logic, so as soon as you get to more complex data manipulation, the slice will be significantly shorter\n\nThat in the end leaves the configureStore call - and that are three lines. You will probably save more code by using createSlice vs manually writing a Provider.",
-      "likes": 7,
-      "date": "",
-      "comment_id": "811795",
-      "sentiment": "null"
-    },
-    {
-      "author": "Tapajyoti Bose",
-      "comment_text": "But I had added the Provider in the Context example 😐\nYou are talking about using useReducer hook with the Context API. I am suggesting that if one is required to modify the data, one should definitely opt for Redux. In case only sharing the data with the Child Components is required, Context would be a better solution",
-      "likes": 4,
-      "date": "",
-      "comment_id": "811836",
-      "sentiment": "null"
-    },
-    {
-      "author": "Lenz Weber",
-      "comment_text": "Yeah, but you are not using the Parent anywhere, which is kinda equivalent to using the Provider in Redux, kinda making it look like one step less for Context ;)\nAs for the \"not using useReducer\" - seems like I read over that - in that case I 100% agree. :)",
-      "likes": 6,
-      "date": "",
-      "comment_id": "811924",
-      "sentiment": "null"
-    },
-    {
-      "author": "Dan",
-      "comment_text": "\"I am suggesting that if one is required to modify the data, one should definitely opt for Redux.\" - can you elaborate? What specific advantages Redux has over using reducers with useReducer in React? Thanks!",
-      "likes": 2,
-      "date": "",
-      "comment_id": "1089334",
-      "sentiment": "null"
-    },
-    {
-      "author": "Lenz Weber",
-      "comment_text": "@gottfried-dev  The problem is not useReducer, which is great for component-local state, but Context, which has no means of subscribing to parts of an object, so as soon as you have any complicated value in your context (which you probably have if you need useReducer), any change to any sub-property will rerender every consumer, if it is interested in the change or not.",
-      "likes": 2,
-      "date": "",
-      "comment_id": "1089385",
-      "sentiment": "null"
-    },
-    {
-      "author": "Mangor1no",
-      "comment_text": "I myself really don't like using redux toolkit. Feel like I have more control when using the old way",
-      "likes": 2,
-      "date": "",
-      "comment_id": "811974",
-      "sentiment": "null"
-    },
-    {
-      "author": "Lenz Weber",
-      "comment_text": "Which part of it exactly is taking control away?\nOh, btw.: if it is only one of those \"I need the control only 10% of the time\" cases - you can always mix both styles. RTK is just Redux, there is absolutely no magic going on that would prevent a mix of RTK reducers and hand-written reducers.",
+      "author": "Ben Halpern",
+      "comment_text": "Just install on VSCode ✅",
       "likes": 5,
-      "date": "",
-      "comment_id": "811977",
+      "date": "Mar 11",
+      "comment_id": "1308261",
       "sentiment": "null"
     },
     {
-      "author": "Philipp Renoth",
-      "comment_text": "Referring to your example, I can write a blog post, too:\n\n\n\n  Context API vs. ES6 import\n\nContext API is too complicated. I can simply import MockData from './mockData' and use it in any component. Context API has 10 lines, import only 1 line.\n\nThen you can write another blog post Redux vs. ES6 import.\nThere are maybe projects which\n\nneed to mutate data\nwant smart component updates\nwant time-travel for debugging\nwant a solid plugin concept for global state management\n\nAnd then there are devs reading blogs about using redux is too complicated and end up introducing their own concepts and ideas around the Context API without knowing one thing about immutable data optimizations and so on.\nYou can use a react context to solve problems that are also being solved by redux, but some features and optimizations are not that easy for homegrown solutions. I mean try it out - it's a great exercise to understand why you should maybe use redux in your production code or stick to a simpler solution that has less features at all.\nI'm not saying, that you should use redux in every project, but redux is not just some stupid boilerplate around the Context API => if you need global state utils check out the libs built for it. There are also others than redux.",
-      "likes": 3,
-      "date": "Nov 30",
-      "comment_id": "812536",
+      "author": "Veilgen Security",
+      "comment_text": "Qodo Gen 1.0 looks like a game-changer for AI-driven development! The agentic workflow and semi-agentic test generation are particularly exciting. How does it handle large-scale projects with complex dependencies? Looking forward to trying it out",
+      "likes": 1,
+      "date": "Mar 18",
+      "comment_id": "1310571",
       "sentiment": "null"
     },
     {
-      "author": "Andrew Baisden",
-      "comment_text": "Redux used to be my first choice for large applications but these days I much prefer to use the Context API. Still good to know Redux though just in case and many projects and companies still require you to know it.",
+      "author": "Dan Shalev",
+      "comment_text": "amazing, great work team!",
       "likes": 2,
-      "date": "",
-      "comment_id": "814309",
+      "date": "Mar 11",
+      "comment_id": "1308287",
       "sentiment": "null"
     },
     {
-      "author": "roggc",
-      "comment_text": "Hello, I have developed a library, react-context-slices which allows to manage state through Context easily and quickly. It has 0 boilerplate. You can define slices of Context and fetch them with a unique hook, useSlice, which acts either as a useState or useReducer hook, depending on if you defined a reducer or not for the slice of Context you are fetching.",
+      "author": "Md Afsar Mahmud",
+      "comment_text": "dev.to/md-afsar-mahmud/techniques-...",
       "likes": 1,
-      "date": "",
-      "comment_id": "1041656",
+      "date": "Mar 18",
+      "comment_id": "1310744",
       "sentiment": "null"
     },
     {
-      "author": "Nishant Tilve",
-      "comment_text": "Also, if you need to maintain some sort of complex state for any mid-level project, you can still create your own reducer using React's Context API itself, before reaching out for redux and adding external dependencies to your project initially.",
-      "likes": 2,
-      "date": "Mar 30",
-      "comment_id": "811646",
-      "sentiment": "null"
-    },
-    {
-      "author": "Kayeeec",
-      "comment_text": "But you might take a performance hit. Redux seems to be better performance-wise when you intend to update the shared data a lot - see stackoverflow.com/a/66972857/7677851. \nIf used correctly that is.",
+      "author": "Ramkumar M N",
+      "comment_text": "Informative, Thank you",
       "likes": 1,
-      "date": "Mar 30",
-      "comment_id": "865380",
+      "date": "Mar 12",
+      "comment_id": "1308381",
       "sentiment": "null"
     },
     {
-      "author": "adam-biggs",
-      "comment_text": "One of the best and most overlooked alternatives to Redux is to use React's own built-in Context API.\nContext API provides a different approach to tackling the data flow problem between React’s deeply nested components. Context has been around with React for quite a while, but it has changed significantly since its inception. Up to version 16.3, it was a way to handle the state data outside the React component tree. It was an experimental feature not recommended for most use cases.\nInitially, the problem with legacy context was that updates to values that were passed down with context could be “blocked” if a component skipped rendering through the shouldComponentUpdate lifecycle method. Since many components relied on shouldComponentUpdate for performance optimizations, the legacy context was useless for passing down plain data.\nThe new version of Context API is a dependency injection mechanism that allows passing data through the component tree without having to pass props down manually at every level.\nThe most important thing here is that, unlike Redux, Context API is not a state management system. Instead, it’s a dependency injection mechanism where you manage a state in a React component. We get a state management system when using it with useContext and useReducer hooks.\nA great next step to learning more is to read this article by Andy Fernandez: scalablepath.com/react/context-api...",
-      "likes": 2,
-      "date": "",
-      "comment_id": "960341",
-      "sentiment": "null"
-    },
-    {
-      "author": "Mohammad Jawad (Kasir) Barati",
-      "comment_text": "Can you give me some explanation to what you meant when you wrote Context is DI.",
-      "likes": 2,
-      "date": "",
-      "comment_id": "1037750",
-      "sentiment": "null"
-    },
-    {
-      "author": "Shakil Ahmed",
-      "comment_text": "Exciting topic! 🚀 I love exploring the nuances of state management in React, and finding the sweet spot between Redux and Context API for optimal performance and simplicity. What factors do you prioritize when making the choice? 🤔",
+      "author": "Tylish Anup",
+      "comment_text": "Well Done",
       "likes": 1,
-      "date": "",
-      "comment_id": "1112591",
+      "date": "Mar 13",
+      "comment_id": "1308878",
       "sentiment": "null"
     },
     {
-      "author": "Lohit Peesapati",
-      "comment_text": "I found Redux to be easier to setup and work with than Context API. I migrated a library I was building in Redux to context API and reused most of the reducer logic, but the amount of optimization and debugging I had to do to make the same functionality work was a nightmare in Context. It made me appreciate Redux more and I switched back to save time. It was a good learning to know the specific use case and limitations of context.",
-      "likes": 2,
-      "date": "",
-      "comment_id": "811709",
-      "sentiment": "null"
-    },
-    {
-      "author": "Tapajyoti Bose",
-      "comment_text": "I too am a huge fan of redux for most projects!",
+      "author": "Learn Computer Academy",
+      "comment_text": "The extensible MCP tooling and semi-agentic test generation sound super practical too. Curious how it manages tricky legacy code, but I’m definitely eager to try it out. Congrats on the launch!",
       "likes": 1,
-      "date": "",
-      "comment_id": "811722",
-      "sentiment": "null"
-    },
-    {
-      "author": "Upride Network",
-      "comment_text": "Hi, We have build out site in react: upride.in , which tech stack should be better in 2024 as we want to do a complete revamp for faster loading.\nif anyone can help for our site that how we can make progress.",
-      "likes": 1,
-      "date": "",
-      "comment_id": "1136351",
-      "sentiment": "null"
-    },
-    {
-      "author": "Salah Eddine Lalami",
-      "comment_text": "@ IDURAR , we use react context api for all UI parts , and we keep our data layer inside redux .\nHere Article about : 🚀 Mastering Advanced Complex React useContext with useReducer ⭐ (Redux like Style) ⭐ : dev.to/idurar/mastering-advanced-c...",
-      "likes": 1,
-      "date": "",
-      "comment_id": "1074552",
+      "date": "Mar 12",
+      "comment_id": "1308391",
       "sentiment": "null"
     }
   ]
