@@ -41,7 +41,7 @@ def analyze_comments_with_gpt(comments):
         comments (list): List of comment dictionaries.
     
     Returns:
-        dict: Analysis results.
+        str: Analysis results.
     """
     try:
         comments_text = "\n".join([f"{comment['author']}: {comment['comment_text']} (Likes: {comment['likes']}, Sentiment: {comment['sentiment']})" for comment in comments])
@@ -61,23 +61,28 @@ def analyze_comments_with_gpt(comments):
         print(f"Error analyzing comments with GPT: {e}")
         return None
 
-def save_summary_and_analysis(summary, analysis, summary_path="summary.txt", analysis_path="comment_analysis.txt"):
+def update_json_with_summary_and_analysis(input_path, summary, analysis):
     """
-    Save the summary and comment analysis to text files.
+    Update the processed_output.json file with the summary and commentary_analysis.
     
     Args:
+        input_path (str): Path to the processed JSON file.
         summary (str): The summarized content.
         analysis (str): The comment analysis results.
-        summary_path (str): Path to save the summary.
-        analysis_path (str): Path to save the comment analysis.
     """
-    with open(summary_path, "w") as file:
-        file.write("Article Summary:\n")
-        file.write(summary + "\n")
-    
-    with open(analysis_path, "w") as file:
-        file.write("Comment Analysis:\n")
-        file.write(analysis + "\n")
+    try:
+        with open(input_path, "r") as file:
+            data = json.load(file)
+        
+        data["summary"] = summary
+        data["commentary_analysis"] = analysis
+        
+        with open(input_path, "w") as file:
+            json.dump(data, file, indent=4, ensure_ascii=False)
+        
+        print(f"Updated {input_path} with summary and commentary_analysis.")
+    except Exception as e:
+        print(f"Error updating JSON file: {e}")
 
 def main(input_path="processed_output.json"):
     """
@@ -99,8 +104,7 @@ def main(input_path="processed_output.json"):
         print("Failed to analyze comments.")
         return
     
-    save_summary_and_analysis(summary, analysis)
-    print("Summary and comment analysis saved to summary.txt and comment_analysis.txt.")
+    update_json_with_summary_and_analysis(input_path, summary, analysis)
 
 if __name__ == "__main__":
     main()
