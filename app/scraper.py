@@ -65,7 +65,6 @@ class MediumScraper:
             "date": self._extract_date(soup),
             "content": self._extract_content(soup),
             "comments": [],
-            "tags": self._extract_tags(soup),
         }
         
         # Try to extract detailed comments
@@ -239,16 +238,6 @@ class MediumScraper:
             content.append(current_section)
             
         return content
-    
-    def _extract_tags(self, soup):
-        """Extract article tags"""
-        tags = []
-        tag_elements = soup.find_all('a', href=re.compile(r'/tag/'))
-        
-        for tag in tag_elements:
-            tags.append(tag.get_text().strip())
-            
-        return tags
 
     def save_to_json(self, article_data, output_path):
         """

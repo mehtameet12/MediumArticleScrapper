@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 import logging
 import sys
@@ -12,7 +10,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def scrape_article(url, output_path="output.json"):
+def scrape_article(url, output_path="raw_output.json"):
     """
     Scrape a Medium article and save it to a JSON file.
     
@@ -59,6 +57,29 @@ def process_article(input_path="raw_output.json", output_path="processed_output.
         logger.error(f"Error processing article: {str(e)}", exc_info=True)
         return False
 
+def summarize_article(input_path="processed_output.json"):
+    """
+    Summarize the article and analyze comments using summarization.py.
+    
+    Args:
+        input_path (str): Path to the processed JSON file
+    """
+    try:
+        logger.info(f"Starting to summarize article and analyze comments from {input_path}")
+        
+        # Construct the command to run summarization.py
+        summarization_script = os.path.join("app", "summarization.py")
+        command = f"python {summarization_script} {input_path}"
+        
+        # Execute the command
+        os.system(command)
+        logger.info(f"Successfully summarized article and analyzed comments.")
+        
+        return True
+    except Exception as e:
+        logger.error(f"Error summarizing article: {str(e)}", exc_info=True)
+        return False
+
 if __name__ == "__main__":
     url = sys.argv[1] if len(sys.argv) > 1 else "https://dev.to/qodo/introducing-qodo-gen-10-transform-your-workflow-with-agentic-ai-5a96"
     raw_output_path = sys.argv[2] if len(sys.argv) > 2 else "raw_output.json"
@@ -80,6 +101,15 @@ if __name__ == "__main__":
         
         if process_success:
             print(f"Successfully processed article and saved to {processed_output_path}")
+            
+            # Summarize the article and analyze comments
+            summarize_success = summarize_article(processed_output_path)
+            
+            if summarize_success:
+                print("Successfully summarized article and analyzed comments.")
+            else:
+                print("Failed to summarize article.")
+                sys.exit(1)
         else:
             print("Failed to process article.")
             sys.exit(1)
