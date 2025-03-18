@@ -12,7 +12,7 @@ def combine_text_content(json_data):
 
 def analyze_sentiment(text, nlp):
     doc = nlp(text)
-    polarity = doc._.polarity  # Get sentiment polarity (-1 to 1)
+    polarity = doc._.polarity
     if polarity > 0:
         return "positive"
     elif polarity < 0:
@@ -37,25 +37,21 @@ def transform_structure(json_data, nlp):
             "comment_text": comment["comment_text"],
             "likes": comment["likes"],
             "replies": 0,
-            "sentiment": sentiment  # Overwrite with analyzed sentiment
+            "sentiment": sentiment
         }
         transformed_data["comments"].append(transformed_comment)
     
     return transformed_data
 
 def main():
-    # Load spaCy and add TextBlob for sentiment analysis
     nlp = spacy.load("en_core_web_sm")
     nlp.add_pipe("spacytextblob")
     
-    # Load the JSON data from raw_output.json
     with open('raw_output.json', 'r') as file:
         data = json.load(file)
     
-    # Transform the structure and analyze sentiment
     transformed_data = transform_structure(data, nlp)
     
-    # Save the transformed data to processed_output.json
     with open('processed_output.json', 'w', encoding='utf-8') as file:
             json.dump(transformed_data, file, indent=4, ensure_ascii=False)
 

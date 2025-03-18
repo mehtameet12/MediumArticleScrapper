@@ -40,6 +40,12 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
+- Add openAI API key to make sure you can summarize the article and perform comments analysis. In the `.env` file add the following
+
+```
+OPENAI_API_KEY="<YOUR_KEY>"
+```
+
 ## Running the Application
 
 ### Scrapping the data from the website
