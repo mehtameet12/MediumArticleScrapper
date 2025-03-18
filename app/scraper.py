@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class MediumScraper:
     """
-    A class for scraping content from Medium articles.
+    A class for scraping content from articles.
     """
 
     def __init__(self):
@@ -44,35 +44,16 @@ class MediumScraper:
                     logger.error(f"Failed to fetch {url} after {self.max_retries} attempts")
                     raise
 
-    def _is_valid_medium_url(self, url):
-        """
-        Check if the URL is a valid Medium article URL.
-        
-        Args:
-            url (str): URL to check
-            
-        Returns:
-            bool: True if valid, False otherwise
-        """
-        parsed_url = urlparse(url)
-        return (
-            "medium.com" in parsed_url.netloc or
-            parsed_url.netloc.endswith(".medium.com")
-        )
-
     def extract_article(self, url):
         """
         Extract content from a Medium article.
         
         Args:
-            url (str): URL of the Medium article
+            url (str): URL of the article
             
         Returns:
             dict: Extracted article data including title, content, and metadata
-        """
-        if not self._is_valid_medium_url(url):
-            raise ValueError("The provided URL is not a valid Medium article URL")
-        
+        """        
         html_content = self._fetch_page(url)
         soup = BeautifulSoup(html_content, 'html.parser')
         
@@ -83,13 +64,82 @@ class MediumScraper:
             "author": self._extract_author(soup),
             "date": self._extract_date(soup),
             "content": self._extract_content(soup),
-            "responses": self._extract_comments(soup),
+            "comments": [],
             "tags": self._extract_tags(soup),
-            "reading_time": self._extract_reading_time(soup)
         }
         
-        return article_data
+        # Try to extract detailed comments
+        article_data["comments"] = self.extract_comments(url)
+        
+        self._removing_top_comment_section(article_data["content"])
 
+        return article_data
+    
+    def extract_comments(self, url):
+        """
+        Extract comments from the article directly from comments section.
+        
+        Args:
+            url (str): URL of the article
+            
+        Returns:
+            list: List of comment dictionaries with author, text, and metadata
+        """
+        html_content = self._fetch_page(url)
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        comments_section = soup.find('section', id='comments')
+        if not comments_section:
+            return []
+            
+        comments = []
+        comment_nodes = comments_section.find_all('div', {'class': 'comment', 'id': lambda x: x and x.startswith('comment-node-')})
+        
+        for node in comment_nodes:
+            try:
+                comment_id = node.get('data-comment-id', '')
+                author_elem = node.find('button', {'class': 'profile-preview-card__trigger'})
+                author = author_elem.get_text().strip() if author_elem else "Unknown author"
+                
+                # Find comment text
+                comment_body = node.find('div', {'class': 'comment__body'})
+                comment_text = comment_body.get_text().strip() if comment_body else ""
+                
+                # Get likes count
+                reactions_count = node.find('span', {'class': 'reactions-count'})
+                likes = int(reactions_count.get_text()) if reactions_count and reactions_count.get_text().isdigit() else 0
+                
+                # Try to get date
+                date_elem = node.find('time', {'class': 'date-no-year'})
+                date = date_elem.get_text().strip() if date_elem else ""
+                
+                # Perform basic sentiment analysis
+                sentiment ="null"
+                
+                comments.append({
+                    "author": author,
+                    "comment_text": comment_text,
+                    "likes": likes,
+                    "date": date,
+                    "comment_id": comment_id,
+                    "sentiment": sentiment
+                })
+            except Exception as e:
+                logger.warning(f"Error extracting comment: {str(e)}")
+                continue
+                
+        return comments
+
+    def _removing_top_comment_section(self, content):
+        comments = []
+        for section in content[:]: 
+            if isinstance(section, dict) and section.get("type") == "section":
+                title = section.get("title", "")
+                if title and title.startswith("Top comments"):
+                    content.remove(section)
+        
+        return comments
+    
     def _extract_title(self, soup):
         """Extract the article title"""
         title_tag = soup.find('h1')
@@ -97,27 +147,17 @@ class MediumScraper:
 
     def _extract_author(self, soup):
         """Extract the author information"""
-        # Look for author information
-        author_element = soup.find('a', {'data-testid': 'authorName'})
+        author_element = soup.find('a', {'class': 'crayons-link fw-bold'})
         if author_element:
             return author_element.get_text().strip()
         return "Author not found"
 
     def _extract_date(self, soup):
         """Extract the publication date"""
-        # First try to find date by data-testid attribute
-        date_element = soup.find('span', {'data-testid': 'storyPublishDate'})
+        date_element = soup.find('time', {'class': 'date-no-year'})
         if date_element:
             return date_element.get_text().strip()
-            
         return "Date not found"
-
-    def _extract_reading_time(self, soup):
-        """Extract the estimated reading time"""
-        reading_time = soup.find(text=re.compile('min read'))
-        if reading_time:
-            return reading_time.strip()
-        return "Reading time not found"
 
     def _extract_content(self, soup):
         """
@@ -129,7 +169,6 @@ class MediumScraper:
         article_element = soup.find('article')
         
         if not article_element:
-            # Try to find the main content section
             article_element = soup.find('section', class_=lambda c: c and 'section' in c)
             if not article_element:
                 return [{"type": "error", "text": "Content could not be extracted"}]
@@ -200,65 +239,7 @@ class MediumScraper:
             content.append(current_section)
             
         return content
-
-    def _extract_comments(self, soup):
-        """Extract article comments/responses"""
-        comments = []
-        
-        response_heading = soup.find('h2', string=lambda s: s and 'Responses' in s)
-        
-        if response_heading:
-            response_containers = soup.find_all('div', class_="bh ez")
-            
-            if response_containers:
-                for container in response_containers:
-                    # Get author information
-                    author_element = container.find('p', class_=lambda c: c and 'bk' in c and 'bg' in c) 
-                    
-                    # Get response text - it's often in a pre tag with class "kl"
-                    text_element = container.find('pre', class_="kl")
-                    if text_element:
-                        text_element = text_element.find('div', class_="gu")
-                    
-                    # Get date
-                    date_element = container.find('span')
-                    
-                    # Create comment data structure
-                    comment_data = {
-                        "author": author_element.get_text().strip() if author_element else "Unknown",
-                        "text": text_element.get_text().strip() if text_element else "No text",
-                        "date": date_element.get_text().strip() if date_element else None,
-                    }
-                    
-                    comments.append(comment_data)
-        
-        # If we didn't find responses using the above method, try an alternative approach
-        if not comments:
-            response_div = soup.find('div', class_=lambda c: c and 'dj bh hs ht hu hv' in c)
-            if response_div:
-                response_containers = response_div.find_all('div', class_=lambda c: c and 'fq l' in c)
-                
-                for container in response_containers:
-                    # Get author information
-                    author_element = container.find('p', class_=lambda c: c and 'bk' in c)
-                    
-                    # Get response text
-                    text_element = container.find('div', class_="gu")
-                    
-                    # Get date
-                    date_element = container.find('span')
-                    
-                    # Create comment data structure
-                    comment_data = {
-                        "author": author_element.get_text().strip() if author_element else "Unknown",
-                        "text": text_element.get_text().strip() if text_element else "No text",
-                        "date": date_element.get_text().strip() if date_element else None,
-                    }
-                    
-                    comments.append(comment_data)
-        
-        return comments if comments else []
-
+    
     def _extract_tags(self, soup):
         """Extract article tags"""
         tags = []
@@ -290,7 +271,7 @@ def main(url, output_path):
     Main function to run the scraper directly.
     
     Args:
-        url (str): URL of the Medium article to scrape
+        url (str): URL of the article to scrape
         output_path (str): Path to save the JSON output
     """
     scraper = MediumScraper()

@@ -35,18 +35,54 @@ def scrape_article(url, output_path="output.json"):
         logger.error(f"Error scraping article: {str(e)}", exc_info=True)
         return False
 
+def process_article(input_path="raw_output.json", output_path="processed_output.json"):
+    """
+    Process the scraped article data using processor.py.
+    
+    Args:
+        input_path (str): Path to the raw JSON file (output from scraper)
+        output_path (str): Path to save the processed JSON file
+    """
+    try:
+        logger.info(f"Starting to process article data from {input_path}")
+        
+        # Construct the command to run processor.py
+        processor_script = os.path.join("app", "processor.py")
+        command = f"python {processor_script} {input_path} {output_path}"
+        
+        # Execute the command
+        os.system(command)
+        logger.info(f"Successfully processed article and saved to {output_path}")
+        
+        return True
+    except Exception as e:
+        logger.error(f"Error processing article: {str(e)}", exc_info=True)
+        return False
+
 if __name__ == "__main__":
-    # Use command line arguments if provided, otherwise use default values
-    url = sys.argv[1] if len(sys.argv) > 1 else "https://medium.com/electronic-life/ai-music-style-can-there-be-too-much-culture-6e1f5480794a"
-    output_path = sys.argv[2] if len(sys.argv) > 2 else "output.json"
+    url = sys.argv[1] if len(sys.argv) > 1 else "https://dev.to/qodo/introducing-qodo-gen-10-transform-your-workflow-with-agentic-ai-5a96"
+    raw_output_path = sys.argv[2] if len(sys.argv) > 2 else "raw_output.json"
+    processed_output_path = sys.argv[3] if len(sys.argv) > 3 else "processed_output.json"
     
-    if not os.path.isabs(output_path):
-        output_path = os.path.abspath(output_path)
+    if not os.path.isabs(raw_output_path):
+        raw_output_path = os.path.abspath(raw_output_path)
+    if not os.path.isabs(processed_output_path):
+        processed_output_path = os.path.abspath(processed_output_path)
     
-    success = scrape_article(url, output_path)
+    # Scrape the article
+    success = scrape_article(url, raw_output_path)
     
     if success:
-        print(f"Successfully scraped article and saved to {output_path}")
+        print(f"Successfully scraped article and saved to {raw_output_path}")
+        
+        # Process the scraped article
+        process_success = process_article(raw_output_path, processed_output_path)
+        
+        if process_success:
+            print(f"Successfully processed article and saved to {processed_output_path}")
+        else:
+            print("Failed to process article.")
+            sys.exit(1)
     else:
-        print("Failed to scrape article. Check the logs for details.")
+        print("Failed to scrape article.")
         sys.exit(1)
